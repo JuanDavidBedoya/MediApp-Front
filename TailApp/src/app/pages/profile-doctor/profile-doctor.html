@@ -1,0 +1,109 @@
+<div class="fixed inset-0 min-h-screen w-full bg-linear-to-b from-blue-700 via-blue-400 to-blue-blue z-10"></div>
+
+<div class="relative flex min-h-screen justify-center rounded-3xl bg-transparent py-24">
+  <div class="z-10 mx-auto w-full max-w-6xl rounded-2xl bg-white p-10 border-2 border-blue-500 shadow-2xl">
+    <div class="mb-8 text-center">
+      <h3 class="text-3xl font-semibold text-blue-950">Mi Perfil de Doctor</h3>
+      <p class="text-blue-950 mt-2">
+        Actualiza tu información profesional y personal
+      </p>
+    </div>
+
+        @if (submissionMessage) {
+    <div class="mb-4 p-4 rounded-lg text-center font-medium"
+      [ngClass]="{'bg-green-100 text-green-800': submissionMessage.type === 'success', 'bg-red-100 text-red-800': submissionMessage.type === 'error'}">
+      {{ submissionMessage.text }}
+    </div>
+    }
+
+    @if (isLoadingProfile) {
+    <div class="flex justify-center items-center py-10">
+      <span class="text-blue-800 font-medium animate-pulse">Cargando tu perfil de doctor...</span>
+    </div>
+    } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="flex flex-col items-center justify-start space-y-4">
+        <img src="/img/Usuario.jpg" alt="Foto de Perfil de Doctor"
+          onerror="this.src='https://placehold.co/256x256/006655/FFFFFF?text=Doctor'"
+          class="h-64 w-64 rounded-full object-cover border-4 border-blue-200 shadow-lg bg-blue-100">
+
+        <button type="button" class="w-full max-w-xs rounded-lg border border-dashed border-blue-400 py-2 text-sm 
+                       font-medium text-blue-700 hover:bg-blue-50" disabled>
+          Cambiar Foto (Próximamente)
+        </button>
+      </div>
+
+      <form class="space-y-3 w-full" (ngSubmit)="actualizarPerfilDoctor()">
+        <div>
+          <label class="text-sm font-medium text-blue-900">Cédula Profesional</label>
+          <input type="text" placeholder="Cédula" name="cedula" readonly [value]="currentDoctor?.cedula || 'N/A'"
+            class="w-full rounded-lg border bg-gray-200 px-4 py-3 text-sm text-gray-600 focus:outline-none cursor-not-allowed" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Nombre Completo</label>
+          <input type="text" placeholder="Nombre Completo" name="nombre" [(ngModel)]="doctorUpdateData.name" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Correo Electrónico</label>
+          <input type="email" placeholder="Correo Electrónico" name="email" [(ngModel)]="doctorUpdateData.email" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out" />
+        </div>
+        
+        <div>
+          <label class="text-sm font-medium text-blue-900">Teléfono</label>
+          <input type="tel" placeholder="Número de teléfono" name="phone" [(ngModel)]="doctorUpdateData.phone" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Nueva Contraseña</label>
+          <input type="password" placeholder="Nueva Contraseña (dejar en blanco para no cambiar)" name="password"
+            [(ngModel)]="doctorUpdateData.password"
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Especialidad</label>
+          <select name="speciality" [(ngModel)]="doctorUpdateData.specialityName" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out">
+            <option [ngValue]="''" disabled>
+              @if (specialities.isLoading()) { Cargando Especialidades... } @else { Selecciona tu Especialidad }
+            </option>
+            @for (spec of specialities.value(); track spec.idSpeciality) {
+            <option [value]="spec.name">{{ spec.name }}</option>
+            }
+          </select>
+        </div>
+
+                <div class="pt-6">
+          <button type="submit" [disabled]="isSubmitting"
+            class="w-full cursor-pointer justify-center rounded-lg p-3 font-semibold tracking-wide text-white
+                           bg-linear-to-br from-blue-800 via-blue-700 to-blue-800
+                           transition-all duration-300 ease-in-out
+                           hover:scale-105 hover:contrast-125
+                           disabled:bg-gray-400 disabled:cursor-not-allowed disabled:scale-100 disabled:contrast-100">
+            @if(isSubmitting) {
+            <span class="animate-pulse">Actualizando Perfil...</span>
+            } @else {
+            <span>Guardar Cambios</span>
+            }
+          </button>
+        </div>
+      </form>
+    </div>
+    } 
+  </div>
+</div>

@@ -1,0 +1,76 @@
+<header class="w-full p-4 flex justify-between items-center bg-blue-900
+               text-white shadow-lg fixed top-0 left-0 z-100">
+  <div class="shrink-0 flex items-center space-x-3">
+    <img src="/img/Logo.jpg" 
+         alt="Logo Mediapp" 
+         class="h-13 w-13 object-cover rounded-full"> 
+    <span class="text-2xl font-bold text-white tracking-tight">
+      MediApp
+    </span>
+  </div>
+
+  <nav class="flex items-center space-x-10"> 
+    
+    @if (isLoggedIn) {
+      
+      @if (isUser) {
+        <a routerLink="/home-private" class="font-medium text-gray-200 hover:text-white 
+                   transition-colors duration-200 cursor-pointer">
+          Inicio
+        </a>
+        <a routerLink="/appointments-user" class="font-medium text-gray-200 hover:text-white 
+                   transition-colors duration-200 cursor-pointer">
+          Mis Citas
+        </a>
+        <a routerLink="/profile" class="font-medium text-gray-200 hover:text-white 
+                   transition-colors duration-200 cursor-pointer">
+          Perfil
+        </a>
+
+      } 
+      
+      @if (isDoctor) {
+        <a routerLink="/home-doctor" class="font-medium text-gray-200 hover:text-white 
+                   transition-colors duration-200 cursor-pointer">
+          Inicio
+        </a>
+        <a routerLink="/profile-doctor" class="font-medium text-gray-200 hover:text-white 
+                   transition-colors duration-200 cursor-pointer">
+          Perfil
+        </a>
+      }
+
+      <button (click)="logout()" 
+              class="cursor-pointer rounded-full px-6 py-2 font-semibold text-gray-100
+                     bg-linear-to-br from-red-600 via-red-700 to-red-800
+                     transition-all duration-300 ease-in-out
+                     hover:scale-105 hover:contrast-125">
+        Cerrar Sesión
+      </button>
+
+    } @else {
+      
+      <a routerLink="/home-public" 
+         class="font-medium text-gray-200 hover:text-white 
+                transition-colors duration-200 cursor-pointer">
+        Inicio
+      </a>
+
+      <a routerLink="/register" 
+         class="font-medium text-gray-200 hover:text-white 
+                transition-colors duration-200 cursor-pointer">
+        Registrarse
+      </a>
+
+      <a routerLink="/login" 
+         class="cursor-pointer rounded-full px-6 py-2 font-semibold text-gray-100
+                bg-linear-to-br from-blue-600 via-blue-700 to-blue-800
+                transition-all duration-300 ease-in-out
+                hover:scale-105 hover:contrast-125">
+        Iniciar Sesión
+      </a>
+      
+    }
+  </nav>
+
+</header>

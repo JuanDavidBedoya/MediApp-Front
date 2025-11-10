@@ -1,0 +1,146 @@
+<div class="fixed inset-0 min-h-screen w-full bg-linear-to-b from-blue-700 via-blue-400 to-blue-300 z-10"></div>
+
+<div class="relative flex min-h-screen justify-center rounded-3xl bg-transparent py-24">
+
+  <div class="z-10 mx-auto w-full max-w-6xl rounded-2xl bg-white p-10 border-2 border-blue-500 shadow-2xl">
+
+    <div class="mb-8 text-center">
+      <h3 class="text-3xl font-semibold text-blue-950">Mi Perfil</h3>
+      <p class="text-blue-950 mt-2">
+        Actualiza tu información personal
+      </p>
+    </div>
+
+    @if (submissionMessage) {
+    <div class="mb-4 p-4 rounded-lg text-center font-medium"
+      [ngClass]="{'bg-green-100 text-green-800': submissionMessage.type === 'success', 'bg-red-100 text-red-800': submissionMessage.type === 'error'}">
+      {{ submissionMessage.text }}
+    </div>
+    }
+
+    @if (isLoadingProfile) {
+    <div class="flex justify-center items-center py-10">
+      <span class="text-blue-800 font-medium animate-pulse">Cargando tu perfil...</span>
+    </div>
+    } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
+      <div class="flex flex-col items-center justify-start space-y-4">
+        <img src="/img/Usuario.jpg" alt="Foto de Perfil"
+          onerror="this.src='https://placehold.co/256x256/003366/FFFFFF?text=Perfil'"
+          class="h-64 w-64 rounded-full object-cover border-4 border-blue-200 shadow-lg bg-blue-100">
+
+        <button type="button" class="w-full max-w-xs rounded-lg border border-dashed border-blue-400 py-2 text-sm 
+                       font-medium text-blue-700 hover:bg-blue-50" disabled>
+          Cambiar Foto (Próximamente)
+        </button>
+      </div>
+
+      <form class="space-y-3 w-full" (ngSubmit)="actualizarPerfil()">
+        <div>
+          <label class="text-sm font-medium text-blue-900">Cédula</label>
+          <input type="text" placeholder="Cédula" name="cedula" readonly [value]="currentUser?.cedula || 'N/A'"
+            class="w-full rounded-lg border bg-gray-200 px-4 py-3 text-sm text-gray-600 focus:outline-none cursor-not-allowed" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Nombre Completo</label>
+          <input type="text" placeholder="Nombre Completo" name="nombre" [(ngModel)]="userUpdateData.name" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Correo Electrónico</label>
+          <input type="email" placeholder="Correo Electrónico" name="email" [(ngModel)]="userUpdateData.email" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Nueva Contraseña</label>
+          <input type="password" placeholder="Nueva Contraseña (dejar en blanco para no cambiar)" name="password"
+            [(ngModel)]="userUpdateData.password"
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out" />
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">EPS</label>
+          <select name="eps" [(ngModel)]="userUpdateData.epsName" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out">
+            <option [ngValue]="''" disabled>
+              @if (epsList.isLoading()) { Cargando EPS... } @else { Selecciona tu EPS }
+            </option>
+            @for (eps of epsList.value(); track eps.idEps) {
+            <option [value]="eps.name">{{ eps.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div>
+          <label class="text-sm font-medium text-blue-900">Ciudad</label>
+          <select name="ciudad" [(ngModel)]="userUpdateData.cityName" required
+            class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                           focus:border-blue-800 focus:bg-blue-200 focus:outline-none 
+                           focus:scale-[1.03] transition-transform duration-300 ease-out">
+
+            <option [ngValue]="''" disabled>
+              @if (cities.isLoading()) { Cargando Ciudades... } @else { Selecciona tu Ciudad }
+            </option>
+
+            @for (city of cities.value(); track city.idCity) {
+            <option [value]="city.name">{{ city.name }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="space-y-2 pt-2">
+          <label class="text-sm font-medium text-blue-900">Teléfonos</label>
+          @for (telefono of userUpdateData.phones; track $index; let i = $index) {
+          <div class="flex items-center space-x-2">
+            <input type="tel" placeholder="Número de teléfono" [name]="'telefono-' + i"
+              [(ngModel)]="userUpdateData.phones[i]"
+              class="w-full rounded-lg border bg-blue-100 px-4 py-3 text-sm text-blue-950 
+                               focus:border-blue-800 focus:bg-blue-200 focus:outline-none" />
+            @if (userUpdateData.phones.length > 1) {
+            <button type="button" (click)="eliminarTelefono(i)" class="p-2 text-red-500 hover:text-red-700">
+              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </button>
+            }
+          </div>
+          }
+          <button type="button" (click)="agregarTelefono()" class="w-full rounded-lg border border-dashed border-blue-400 py-2 text-sm 
+                           font-medium text-blue-700 hover:bg-blue-50">
+            + Añadir otro teléfono
+          </button>
+        </div>
+
+        <div class="pt-6">
+          <button type="submit" [disabled]="isSubmitting"
+            class="w-full cursor-pointer justify-center rounded-lg p-3 font-semibold tracking-wide text-white
+                           bg-linear-to-br from-blue-800 via-blue-700 to-blue-800
+                           transition-all duration-300 ease-in-out
+                           hover:scale-105 hover:contrast-125
+                           disabled:bg-gray-400 disabled:cursor-not-allowed disabled:scale-100 disabled:contrast-100">
+            @if(isSubmitting) {
+            <span class="animate-pulse">Actualizando...</span>
+            } @else {
+            <span>Actualizar Información</span>
+            }
+          </button>
+        </div>
+
+      </form>
+    </div>
+    } 
+  </div>
+</div>

@@ -1,0 +1,82 @@
+<div class="w-full bg-white">
+
+  <section class="relative w-full min-h-screen bg-blue-900 text-white z-0">
+
+    <div class="absolute inset-0 bg-linear-to-r from-blue-900 via-blue-600 to-blue-400 z-0"></div>
+
+    <div class="fixed top-30 right-6 z-10">
+      <span
+        class="flex items-center space-x-2 text-sm font-medium text-white bg-black/30 backdrop-blur-sm px-4 py-2 rounded-full shadow-lg border border-white/20 hover:bg-black/40 transition">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+          class="w-5 h-5 text-blue-300">
+          <path
+            d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.78 6.125-2.095a1.23 1.23 0 00.41-1.412A9.99 9.99 0 0010 12a9.99 9.99 0 00-6.535 2.493z" />
+        </svg>
+
+        <span>
+          {{ userRole }} ({{ userName }})
+        </span>
+      </span>
+    </div>
+
+    <div class="relative max-w-6xl mx-auto px-4 py-20 sm:py-40 z-10">
+      <h2 class="text-4xl font-bold text-center text-white mb-16">
+        MediApp
+      </h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+        <a routerLink="/appointments-doctor"
+          class="group relative overflow-hidden rounded-3xl bg-linear-to-br from-blue-500 via-blue-300 to-blue-100 p-6 border-2 border-blue-500 shadow-xl
+          transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:contrast-125 cursor-pointer h-56 z-10">
+          <img src="/img/Calendario.jpg" alt="Icono de agendamiento rápido"
+            class="absolute right-4 bottom-4 size-20 rounded-2xl object-cover -rotate-6
+            transition-transform duration-300
+            group-hover:-rotate-12 group-hover:scale-125" />
+          <h3 class="absolute top-6 left-6 text-xl font-semibold text-blue-950
+            transition-transform duration-300
+            group-hover:-translate-y-1">
+            LISTA DE CITAS
+          </h3>
+        </a>
+
+        <a routerLink="/user-list"
+          class="group relative overflow-hidden rounded-3xl bg-linear-to-br from-blue-500 via-blue-300 to-blue-100 p-6 border-2 border-blue-500 shadow-xl
+          transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:contrast-125 cursor-pointer h-56 z-10">
+          <img src="/img/Usuario.jpg" alt="Icono de médicos especializados"
+            class="absolute right-4 bottom-4 size-20 rounded-2xl object-cover -rotate-6
+            transition-transform duration-300
+            group-hover:-rotate-12 group-hover:scale-125" />
+          <h3 class="absolute top-6 left-6 text-xl font-semibold text-blue-950
+            transition-transform duration-300
+            group-hover:-translate-y-1">
+            LISTA DE USUARIOS
+          </h3>
+        </a>
+
+        <a routerLink="/register-doctor"
+          class="group relative overflow-hidden rounded-3xl bg-linear-to-br from-blue-500 via-blue-300 to-blue-100 p-6 border-2 border-blue-500 shadow-xl
+          transition-all duration-300 hover:scale-105 hover:shadow-2xl hover:contrast-125 cursor-pointer h-56 z-10">
+          <img src="/img/Negocio2.jpg" alt="Icono de atención 24 horas"
+            class="absolute right-4 bottom-4 size-20 rounded-2xl object-cover -rotate-6
+            transition-transform duration-300
+            group-hover:-rotate-12 group-hover:scale-125" />
+          <h3 class="absolute top-6 left-6 text-xl font-semibold text-blue-950
+            transition-transform duration-300
+            group-hover:-translate-y-1">
+            AGREGAR DOCTOR
+          </h3>
+        </a>
+
+      </div>
+    </div>
+
+    <svg class="absolute bottom-0 left-0 z-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1440 320">
+      <path fill="#fff" fill-opacity="1"
+        d="M0,0L40,42.7C80,85,160,171,240,197.3C320,224,400,192,480,154.7C560,117,640,75,720,74.7C800,75,880,117,960,154.7C1040,192,1120,224,1200,213.3C1280,203,1360,149,1400,122.7L1440,96L1440,320L1400,320C1360,320,1280,320,1200,320C1120,320,1040,320,960,320C880,320,800,320,720,320C640,320,560,320,480,320C400,320,320,320,240,320C160,320,80,320,40,320L0,320Z">
+      </path>
+    </svg>
+
+  </section>
+
+</div>

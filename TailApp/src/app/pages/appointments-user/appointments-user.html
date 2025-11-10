@@ -1,0 +1,127 @@
+<div class="fixed inset-0 min-h-screen w-full bg-linear-to-b from-blue-700 via-blue-400 to-blue-300 z-10"></div>
+
+<div class="relative flex min-h-screen justify-center rounded-3xl bg-transparent py-24">
+
+  <div class="z-10 mx-auto w-full max-w-6xl rounded-2xl bg-white p-10 border-2 border-blue-500 shadow-2xl">
+
+    <div class="mb-8 text-center">
+      <h3 class="text-3xl font-semibold text-blue-950">Mis Citas Médicas</h3>
+      <p class="text-blue-950 mt-2">
+        Lista de todas tus citas agendadas
+      </p>
+    </div>
+
+    @if (appointments.isLoading()) {
+    <div class="flex justify-center items-center py-10">
+      <span class="text-blue-800 font-medium animate-pulse">Cargando tus citas...</span>
+    </div>
+    } @else if (appointments.error()) {
+    <div class="mb-4 p-4 rounded-lg text-center font-medium bg-red-100 text-red-800">
+      Error al cargar las citas. Intenta recargar la página.
+    </div>
+    } @else if (appointments.value() && appointments.value()!.length === 0) {
+    <div class="text-center py-10">
+      <div class="text-blue-600 mb-4">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-16 h-16 mx-auto">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+        </svg>
+      </div>
+      <h4 class="text-xl font-semibold text-blue-950 mb-2">No tienes citas agendadas</h4>
+      <p class="text-blue-700">Cuando agendes una cita, aparecerá aquí.</p>
+    </div>
+    } @else {
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      @for (appointment of appointments.value(); track appointment.idAppointment) {
+      <div class="bg-linear-to-br from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200 shadow-lg hover:shadow-xl transition-shadow duration-300">
+        <div class="flex items-center justify-between mb-4">
+          <div class="bg-blue-600 text-white rounded-full p-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5" />
+            </svg>
+          </div>
+          <span class="text-sm font-medium text-blue-600 bg-blue-100 px-3 py-1 rounded-full">
+            Cita #{{ appointment.idAppointment.substring(0, 8) }}
+          </span>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Fecha</label>
+            <p class="text-blue-950 font-medium">{{ appointment.date }}</p>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Hora</label>
+            <p class="text-blue-950 font-medium">{{ appointment.time }}</p>
+          </div>
+
+          <div>
+            <label class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Doctor</label>
+            <p class="text-blue-950 font-medium">Cédula: {{ appointment.doctorCedula }}</p>
+          </div>
+
+          @if (appointment.observations) {
+          <div>
+            <label class="text-xs font-semibold text-blue-700 uppercase tracking-wide">Observaciones</label>
+            <p class="text-blue-950 text-sm">{{ appointment.observations }}</p>
+          </div>
+          }
+        </div>
+
+        <div class="mt-4 pt-4 border-t border-blue-200">
+          <button (click)="toggleDetails(appointment.idAppointment)"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 flex items-center justify-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m3.75 9v6m3-3H9m1.5-12H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+            </svg>
+            @if (expandedAppointment === appointment.idAppointment) {
+              Ocultar Detalles
+            } @else {
+              Ver Detalles
+            }
+          </button>
+        </div>
+
+        @if (expandedAppointment === appointment.idAppointment) {
+        <div class="mt-4 p-4 bg-white rounded-lg border border-blue-300 shadow-inner">
+          <h4 class="text-lg font-semibold text-blue-950 mb-3 flex items-center gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-blue-600">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 01-.659 1.591L5 14.5M9.75 3.104c.251.023.501.05.75.082m-.75-.082a24.301 24.301 0 014.5 0m0 0l1.32.307a7.491 7.491 0 011.989.832l.83.672a2.25 2.25 0 001.725.742l1.322-.207a.75.75 0 01.878.645l.042.176a2.25 2.25 0 001.95 2.02l1.333.04a.75.75 0 01.53.918l-.342 2.28a2.25 2.25 0 01-1.814 1.846l-1.669.371a.75.75 0 00-.537.916l.166 1.108a2.25 2.25 0 01-.724 2.006l-1.263 1.073a.75.75 0 00-.25.827l.413 2.297a.75.75 0 01-.468.871l-1.873.35a2.25 2.25 0 01-2.005-.518l-1.417-1.26a.75.75 0 00-.84-.075l-1.417 1.26a2.25 2.25 0 01-2.005.518l-1.873-.35a.75.75 0 01-.468-.871l.413-2.297a.75.75 0 00-.25-.827l-1.263-1.073a2.25 2.25 0 01-.724-2.006l.166-1.108a.75.75 0 00-.537-.916l-1.669-.371a2.25 2.25 0 01-1.814-1.846l-.342-2.28a.75.75 0 01.53-.918l1.333-.04a2.25 2.25 0 001.95-2.02l.042-.176a.75.75 0 01.878-.645l1.322.207a2.25 2.25 0 001.725-.742l.83-.672a7.491 7.491 0 011.989-.832l1.32-.307a24.301 24.301 0 014.5 0z" />
+            </svg>
+            Fórmula Médica
+          </h4>
+
+          @if (formulaDetails.isLoading()) {
+          <div class="flex justify-center items-center py-4">
+            <span class="text-blue-600 text-sm animate-pulse">Cargando fórmula...</span>
+          </div>
+          } @else if (getFormulaDetailsForAppointment(appointment.idAppointment).length === 0) {
+          <div class="text-center py-4">
+            <p class="text-blue-700 text-sm">No hay fórmula médica asociada a esta cita.</p>
+          </div>
+          } @else {
+          <div class="space-y-3">
+            @for (detail of getFormulaDetailsForAppointment(appointment.idAppointment); track detail.idFormulaDetail) {
+            <div class="bg-blue-50 p-3 rounded-lg border border-blue-200">
+              <div class="flex justify-between items-start mb-2">
+                <h5 class="font-semibold text-blue-950">{{ detail.name }}</h5>
+                <span class="text-sm text-blue-600 bg-blue-100 px-2 py-1 rounded">
+                  Cantidad: {{ detail.quantity }}
+                </span>
+              </div>
+              <p class="text-sm text-blue-800">
+                <span class="font-medium">Dosis:</span> {{ detail.dosage }}
+              </p>
+            </div>
+            }
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+    }
+
+  </div>
+</div>
