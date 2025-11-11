@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://13.216.76.24',  
+  apiUrl: 'https://mediapp-7061.onrender.com',  
 };
